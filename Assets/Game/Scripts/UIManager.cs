@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         //_ammoText = GetComponent<Text>();
+        // 此找对象的方法是根据对象的名字查找的，不是很好，如果名字修改了就出bug了
         _ammoText = GameObject.Find("Ammo_Text").GetComponent<Text>();
         _coinIcon = GameObject.Find("Coin_Icon");
         _coinIcon.SetActive(false);
@@ -20,7 +21,7 @@ public class UIManager : MonoBehaviour
 
     public void updateAmmo(int count)
     {
-        _ammoText.text = "Ammo: " + count;
+        _ammoText.text = "子弹数 " + count;
     }
 
     public void gainCoin()

@@ -369,7 +369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4397837044683496, guid: 88bae2de7f0014e4fa5e93fd72610be7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.395
+      value: -1.383
       objectReference: {fileID: 0}
     - target: {fileID: 4397837044683496, guid: 88bae2de7f0014e4fa5e93fd72610be7, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1321,7 +1321,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0

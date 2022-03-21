@@ -4,23 +4,28 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Test button")]
+    [SerializeField] public bool test = true;
+
     private CharacterController _controller;
     [SerializeField] private float _speed = 3.5f;
     private float _gravity = 9.81f;
     [SerializeField] private ParticleSystem _muzzleMesh;
     [SerializeField] private GameObject _hitMarkerPrefab;
     [SerializeField] private AudioSource _shootingAudio;
-    [SerializeField] private int _currentAmmo = 50;
+
+    private int _currentAmmo;
     [SerializeField] private int _maxAmmo = 50;
     private bool _hasGun;
     private bool _isReloading;
     private UIManager _uiManager;
     [SerializeField] bool _hasCoin;
 
-    [SerializeField] private GameObject _weapon;
+    private GameObject _weapon;
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         _controller = GetComponent<CharacterController>();
 
         Cursor.visible = false;
@@ -32,16 +37,28 @@ public class Player : MonoBehaviour
 
         _isReloading = false;
 
-        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _uiManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UIManager>();
+        _uiManager.updateAmmo(_maxAmmo);
+        _currentAmmo = _maxAmmo;
 
         _hasCoin = false;
 
+        // 会自动添加tag为"Weapon"的对象到_weapon中
+        _weapon = GameObject.FindGameObjectWithTag("Weapon");
         _weapon.SetActive(false);
+
+        if (test == true)
+        {
+            _hasGun = true;
+            _weapon.SetActive(true);
+        }
     }
 
+
     // Update is called once per frame
-    void Update() {
-        if(Input.GetMouseButton(0) && _currentAmmo > 0)
+    void Update()
+    {
+        if (Input.GetMouseButton(0) && _currentAmmo > 0)
         {
             shoot();
         }
@@ -51,29 +68,32 @@ public class Player : MonoBehaviour
             _shootingAudio.Stop();
         }
 
-        if(Input.GetKey(KeyCode.R) && _isReloading == false)
+        if (Input.GetKey(KeyCode.R) && _isReloading == false)
         {
             _isReloading = true;
             StartCoroutine(Reload());
         }
 
         // Press "Space" to hide/show mouse cursor
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             if (Cursor.visible.Equals(false))
             {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-            } else
+            }
+            else
             {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
             }
-            
+
         }
         CalculateMovement();
     }
 
-    private void CalculateMovement() {
+    private void CalculateMovement()
+    {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
@@ -94,7 +114,6 @@ public class Player : MonoBehaviour
         /* 1. Raycast Part */
         Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hitInfo;
-
 
         //if(Physics.Raycast(rayOrigin, Mathf.Infinity)) {
         //    Debug.Log("Raycast hit something!");
