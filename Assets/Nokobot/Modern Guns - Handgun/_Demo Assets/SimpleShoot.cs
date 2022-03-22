@@ -24,6 +24,9 @@ public class SimpleShoot : MonoBehaviour
     private AudioSource audioPlayer;
     [SerializeField] private AudioClip shootingAudio;
 
+    [Header("Recoil")]
+    [SerializeField] private Recoil recoil_script;
+
     [Header("Settings")]
     [SerializeField] [Tooltip("Specify time to destory the casing object")] private float destroyTimer = 2f;
     [SerializeField] [Tooltip("Bullet Speed")]  private float shotPower = 500f;
@@ -54,6 +57,7 @@ public class SimpleShoot : MonoBehaviour
         {
             //Calls animation on the gun that has the relevant animation events that will fire
             gunAnimator.SetTrigger("Fire");
+            recoil_script.RecoilFire();
 
             /* 此处不用额外调用一次Shoot()。Q. 在哪里调用了？*/
             //Shoot(); 
@@ -90,8 +94,15 @@ public class SimpleShoot : MonoBehaviour
         { return; }
 
         // Create a bullet and add force on it in direction of the barrel
-        Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+        // Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+        var shootingBullet = Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation);
+        shootingBullet.GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+        wait(10);
+        Destroy(shootingBullet);
+    }
 
+    IEnumerator wait(int seconds){
+        yield return new WaitForSeconds(seconds);
     }
 
     void fireCheck()
