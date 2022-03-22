@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTwo : MonoBehaviour
+public class PlayerThree : MonoBehaviour
 {
     [Header("Test button")]
     [SerializeField] [Tooltip("In test mode, the weapon will be shown without picking the coin")] public bool test = true;
 
-
-    private CharacterController _controller;
-    [SerializeField] private float _speed = 3.5f;
     private float _gravity = 9.81f;
 
     private int _currentAmmo;
@@ -17,17 +14,12 @@ public class PlayerTwo : MonoBehaviour
     private bool _hasGun;
     private bool _isReloading;
     private UIManager _uiManager;
-    [SerializeField] bool _hasCoin;
+    [SerializeField] private bool _hasCoin;
 
     private GameObject _weapon;
 
     // Start is called before the first frame update
     void Start() {
-        _controller = GetComponent<CharacterController>();
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
         _hasGun = false;
 
         _isReloading = false;
@@ -57,27 +49,8 @@ public class PlayerTwo : MonoBehaviour
         {
             _isReloading = true;
             StartCoroutine(Reload());
-        } 
-
-        CalculateMovement();
+        }
     }
-
-    private void CalculateMovement() {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
-        Vector3 velocity = direction * _speed;
-        velocity.y -= _gravity;
-
-        // Translate the local space to world space. So the movement will not be backwards even the rotation of axis y is 180 degree
-        velocity = transform.transform.TransformDirection(velocity);
-
-        //Vector3 velocity = direction;
-        // In order to slow down the movement, need to multiply with (Time.deltaTime).
-        // If we don't multiply velocity, the player will move 1 meter/sec.
-        _controller.Move(velocity * Time.deltaTime);
-    }
-
 
     IEnumerator Reload()
     {

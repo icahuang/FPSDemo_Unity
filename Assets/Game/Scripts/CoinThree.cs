@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinTwo : MonoBehaviour
+public class CoinThree : MonoBehaviour
 {
     //private AudioSource _audioSource;
     [SerializeField] private AudioClip _coinPickUpAudio;
+    [SerializeField] string playerTag = "Player";
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Player" && Input.GetKeyDown(KeyCode.E))
+        if (other.tag == playerTag && Input.GetKeyDown(KeyCode.E))
         {
-            PlayerTwo player = other.GetComponent<PlayerTwo>();
+            PlayerThree player = other.GetComponent<PlayerThree>();
             if (player != null)
             {
                 player.getCoin();
